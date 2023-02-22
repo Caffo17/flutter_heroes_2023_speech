@@ -1,0 +1,40 @@
+name: flutter_heroes_2023_speech
+
+packages:
+  - packages/**
+  - fe/**
+  - dbe/**
+  - '*'
+
+ignore:
+  - build
+
+ide:
+  intellij:
+    true
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  build_runner:
+    exec: dart pub run build_runner build --delete-conflicting-outputs
+    select-package:
+      depends-on: "build_runner"
+  analyze:
+    exec: dart analyze .
+    select-package:
+      dir-exists: "lib"
+  format:
+    exec: dart format . -l 100
+    select-package:
+      dir-exists: "lib"
+  run_server:
+    exec: dart_frog dev
+    select-package:
+      scope: "ntt_device_dbe"
+  build_server:
+    exec: dart_frog build
+    select-package:
+      scope: "ntt_device_dbe"

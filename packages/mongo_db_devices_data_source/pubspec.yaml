@@ -1,0 +1,21 @@
+name: mongo_db_devices_data_source
+description: Implementation for DevicesDataSource interface. MongoDB database implementation.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: '>=3.3.0'
+
+dependencies:
+  dependencies:
+    path: ../dependencies
+  devices_data_source:
+    path: ../devices_data_source
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0

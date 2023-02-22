@@ -1,0 +1,35 @@
+include: package:very_good_analysis/analysis_options.3.1.0.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/**/*.gr.dart
+    - lib/**/*.g.dart
+    - lib/**/*.freezed.dart
+  errors:
+    invalid_annotation_target: ignore
+    public_member_api_docs: ignore
+    non_bool_condition: ignore
+    argument_type_not_assignable: ignore
+    return_of_invalid_type_from_closure: ignore
+    library_private_types_in_public_api: ignore
+    depend_on_referenced_packages: ignore
+    omit_local_variable_types: ignore
+    avoid_multiple_declarations_per_line: ignore
+    one_member_abstracts: ignore
+
+linter:
+  rules:
+    file_names: false
+    lines_longer_than_80_chars: false
+    avoid_catching_errors: false
+    avoid_dynamic_calls: false
+    public_member_api_docs: false
+    prefer_relative_imports: true
+    always_declare_return_types: true
+    always_use_package_imports: false
+    annotate_overrides: true
+    avoid_empty_else: true
+    require_trailing_commas: true
+    avoid_print: true
+    sort_pub_dependencies: true

@@ -1,0 +1,585 @@
+openapi: 3.0.1
+info:
+    title: DeviceManagement APIs
+    description: Device management app dedicated DBE
+    version: "0.1"
+servers:
+    - url: http://localhost:8080
+    - url: https://devicedbe-prod-nttdevicedbe-gjnfqe.mo5.mogenius.io:80
+
+paths:
+    /login:
+        post:
+            tags:
+                - Authentication
+            description: Authentication through Valueteam credentials
+            summary: Authentication through Valueteam credentials
+            requestBody:
+                $ref: "#/components/requestBodies/LoginRequest"
+            responses:
+                "200":
+                    description: Successful authentication
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/LoginPayload"
+
+                "400":
+                    description: Wrong credentials
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+    /admins:
+        get:
+            tags:
+                - Admins
+            description: Retrieve the list of admins
+            summary: Retrieve the list of admins
+            security:
+                - BearerAuth: []
+            responses:
+                "200":
+                    description: List of admins
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AdminsPayload"
+                "500":
+                    description: Internal Server Error
+        post:
+            tags:
+                - Admins
+            description: Add new admin
+            summary: Add new admin
+            security:
+                - BearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/AddAdminRequestBody"
+            responses:
+                "201":
+                    description: Admin added successfully
+                "400":
+                    description: Bad request. Admin could already exists or email is not valid
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "403":
+                    description: User not allowed to perform admin add
+                "500":
+                    description: Internal Server Error
+    /admins/{email}:
+        delete:
+            tags:
+                - Admins
+            description: Remove an admin
+            summary: Remove an admin
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: email
+                  in: path
+                  description: Admin email
+                  required: true
+                  schema:
+                      type: string
+                      format: email
+            responses:
+                "200":
+                    description: Admin removed successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "400":
+                    description: Bad request. Admin could not exists or email is not valid
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "403":
+                    description: User not allowed to perform admin removal
+                "500":
+                    description: Internal Server Error
+
+    /devices:
+        get:
+            tags:
+                - Devices
+            description: Retrieve the list of devices
+            summary: Retrieve the list of devices
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: status
+                  in: query
+                  schema:
+                      $ref: "#/components/schemas/DeviceStatus"
+                  description: Filter devices based on their status
+                  required: false
+                  explode: true
+                - name: office
+                  in: query
+                  schema:
+                      $ref: "#/components/schemas/Office"
+                  description: Filter devices based on their office location
+                  required: false
+                  explode: true
+            responses:
+                "200":
+                    description: List of devices
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DevicesPayload"
+                "401":
+                    description: Failed authentication
+                "500":
+                    description: Internal Server Error
+        post:
+            tags:
+                - Devices
+            description: Create new device
+            summary: Create new device
+            security:
+                - BearerAuth: []
+            requestBody:
+                $ref: "#/components/requestBodies/DeviceCreationRequest"
+            responses:
+                "201":
+                    description: Device created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                required:
+                                    - success
+                                    - payload
+                                properties:
+                                    success:
+                                        type: boolean
+                                    message:
+                                        type: string
+                                    payload:
+                                        $ref: "#/components/schemas/Device"
+                "400":
+                    description: Bad request. Missing body or not valid JSON. Missing fields or not valid fields
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "403":
+                    description: User not allowed to perform device creation
+                "500":
+                    description: Internal Server Error
+    /devices/{udid}:
+        get:
+            tags:
+                - Devices
+            description: Retrieve a device based on its UDID
+            summary: Retrieve a device based on its UDID
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: udid
+                  in: path
+                  description: Device identifier
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Device found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DevicePayload"
+                "401":
+                    description: Failed authentication
+                "404":
+                    description: Device not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+        put:
+            tags:
+                - Devices
+            description: Edit a device based on its UDID
+            summary: Edit a device based on its UDID
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: udid
+                  in: path
+                  description: Device identifier
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                $ref: "#/components/requestBodies/DeviceCreationRequest"
+            responses:
+                "200":
+                    description: Device edited
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DevicePayload"
+                "400":
+                    description: Bad request. Missing body or not valid JSON. Missing fields or not valid fields
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "403":
+                    description: User not allowed to perform device edit
+                "404":
+                    description: Device not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+        delete:
+            tags:
+                - Devices
+            description: Delete a device based on its UDID
+            summary: Delete a device based on its UDID
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: udid
+                  in: path
+                  description: Device identifier
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Device deleted
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "403":
+                    description: User not allowed to perform device deletion
+                "404":
+                    description: Device not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+    /devices/{udid}/reserve:
+        post:
+            tags:
+                - Devices
+            description: Reserve a device based on its UDID
+            summary: Reserve a device based on its UDID
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: udid
+                  in: path
+                  description: Device identifier
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Device reserved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DevicePayload"
+                "401":
+                    description: Failed authentication
+                "404":
+                    description: Device not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+    /devices/{udid}/release:
+        post:
+            tags:
+                - Devices
+            description: Release a device based on its UDID
+            summary: Release a device based on its UDID
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: udid
+                  in: path
+                  description: Device identifier
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Device released
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DevicePayload"
+                "400":
+                    description: Trying to release a device not assigned to user
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "401":
+                    description: Failed authentication
+                "404":
+                    description: Device not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GenericPaylod"
+                "500":
+                    description: Internal Server Error
+
+components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+    requestBodies:
+        LoginRequest:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - username
+                            - password
+                        properties:
+                            username:
+                                type: string
+                            password:
+                                type: string
+                                format: password
+        DeviceCreationRequest:
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/DeviceRequestBody"
+    schemas:
+        GenericPaylod:
+            description: Base payload
+            type: object
+            required:
+                - success
+            properties:
+                success:
+                    type: boolean
+                message:
+                    type: string
+        AdminsPayload:
+            description: Admins payload
+            type: object
+
+            allOf:
+                - $ref: "#/components/schemas/GenericPaylod"
+                - required:
+                      - payload
+                - properties:
+                      payload:
+                          type: object
+                          required:
+                              - list
+                          properties:
+                              list:
+                                  type: array
+                                  items:
+                                      type: string
+                                      format: email
+        LoginPayload:
+            description: Login payload
+            allOf:
+                - $ref: "#/components/schemas/GenericPaylod"
+                - required:
+                      - payload
+                - properties:
+                      payload:
+                          type: object
+                          required:
+                              - token
+                              - user
+                          properties:
+                              token:
+                                  type: string
+                              user:
+                                  $ref: "#/components/schemas/User"
+        DevicePayload:
+            description: Single device payload
+            allOf:
+                - $ref: "#/components/schemas/GenericPaylod"
+                - required:
+                      - payload
+                - properties:
+                      payload:
+                          type: object
+                          required:
+                              - device
+                          properties:
+                              device:
+                                  $ref: "#/components/schemas/Device"
+        DevicesPayload:
+            description: Single device payload
+            allOf:
+                - $ref: "#/components/schemas/GenericPaylod"
+                - required:
+                      - payload
+                - properties:
+                      payload:
+                          type: object
+                          required:
+                              - list
+                          properties:
+                              list:
+                                  type: array
+                                  items:
+                                      $ref: "#/components/schemas/Device"
+        User:
+            description: User info
+            type: object
+            properties:
+                mail:
+                    type: string
+                    format: email
+                userId:
+                    type: integer
+                role:
+                    $ref: "#/components/schemas/Role"
+            required:
+                - mail
+                - userId
+                - role
+        Role:
+            description: User role
+            type: string
+            enum:
+                - admin
+                - member
+        DeviceStatus:
+            description: Device status
+            type: string
+            enum:
+                - available
+                - notAvailable
+                - inUse
+        Office:
+            description: Device office
+            type: string
+            enum:
+                - milano
+                - treviso
+                - roma
+                - napoli
+                - cosenza
+        Os:
+            description: Device OS
+            type: string
+            enum:
+                - android
+                - ios
+        Reservation:
+            description: Device reservation
+            type: object
+            required:
+                - userId
+                - userEmail
+                - startedAt
+            properties:
+                userId:
+                    type: integer
+                userEmail:
+                    type: string
+                    format: email
+                startedAt:
+                    type: string
+                    format: date-time
+                finishedAt:
+                    type: string
+                    nullable: true
+                    format: date-time
+        AddAdminRequestBody:
+            description: Admin model
+            type: object
+            required:
+                - email
+            properties:
+                email:
+                    type: string
+                    format: email
+        DeviceRequestBody:
+            description: Device model
+            type: object
+            required:
+                - udid
+                - name
+                - office
+                - accountEmail
+                - accountPassword
+                - os
+                - osVersion
+            properties:
+                udid:
+                    type: string
+                name:
+                    type: string
+                status:
+                    $ref: "#/components/schemas/DeviceStatus"
+                office:
+                    $ref: "#/components/schemas/Office"
+                accountEmail:
+                    type: string
+                accountPassword:
+                    type: string
+                pin:
+                    type: string
+                    nullable: true
+                os:
+                    $ref: "#/components/schemas/Os"
+                osVersion:
+                    type: string
+        Device:
+            description: Complete device model
+            type: object
+            allOf:
+                - $ref: "#/components/schemas/DeviceRequestBody"
+                - properties:
+                      reservation:
+                          type: object
+                          allOf:
+                              - nullable: true
+                              - $ref: "#/components/schemas/Reservation"
+                      useHistory:
+                          type: array
+                          default: []
+                          items:
+                              $ref: "#/components/schemas/Reservation"

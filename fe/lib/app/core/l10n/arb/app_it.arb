@@ -1,0 +1,11 @@
+{
+  "@@locale": "it",
+  "login_title_1": "Mobile &",
+  "login_title_2": "Emerging Devices",
+  "username": "Username",
+  "password": "Password",
+  "login": "Login",
+  "remember_me": "Remember me",
+  "missing_password": "Password mancante",
+  "missing_username": "Username mancante"
+}

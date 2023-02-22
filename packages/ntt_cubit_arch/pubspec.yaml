@@ -1,0 +1,26 @@
+name: ntt_cubit_arch
+description: Collection on interface and base classes to implement an architecture based on Bloc/Cubit
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: '>=3.3.0'
+
+dependencies:
+  dartz: ^0.10.1
+  dependencies:
+    path: ../dependencies
+  dio: ^4.0.6
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  hive: ^2.2.3
+  http: ^0.13.5
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0

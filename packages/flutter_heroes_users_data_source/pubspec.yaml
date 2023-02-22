@@ -1,0 +1,22 @@
+name: flutter_heroes_users_data_source
+description: An implementation of UsersDataSource for Flutter Heroes event
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: '>=3.3.0'
+
+dependencies:
+  dependencies:
+    path: ../dependencies
+  users_data_source:
+    path: ../users_data_source
+  uuid: ^3.0.7
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0

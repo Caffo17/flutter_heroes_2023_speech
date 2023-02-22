@@ -1,0 +1,36 @@
+name: ntt_device_dbe
+description: An new Dart Frog application
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: '>=3.3.0'
+
+dependencies:
+  commons_ntt_device_dbe:
+    path: '../packages/commons_ntt_device_dbe'
+  dart_frog: ^0.3.2
+  dart_jsonwebtoken: ^2.7.1
+  dependencies:
+    path: '../packages/dependencies'
+  devices_data_source:
+    path: '../packages/devices_data_source'
+  flutter_heroes_users_data_source:
+    path: '../packages/flutter_heroes_users_data_source'
+  mason: ^0.1.0-dev.40
+  mason_cli: ^0.1.0-dev.42
+  mongo_db_devices_data_source:
+    path: '../packages/mongo_db_devices_data_source'
+  ntt_device_models:
+    path: '../packages/ntt_device_models'
+  shelf_swagger_ui: ^1.0.0+2
+  users_data_source:
+    path: '../packages/users_data_source'
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0

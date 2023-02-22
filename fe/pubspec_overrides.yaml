@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: ntt_cubit_arch,ntt_device_models,dependencies
+dependency_overrides:
+  dependencies:
+    path: ../packages/dependencies
+  ntt_cubit_arch: 
+    path: ../packages/ntt_cubit_arch
+  ntt_device_models:
+    path: ../packages/ntt_device_models

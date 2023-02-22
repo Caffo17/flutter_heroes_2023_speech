@@ -1,0 +1,10 @@
+# melos_managed_dependency_overrides: commons_ntt_device_dbe,users_data_source,ntt_device_models,dependencies
+dependency_overrides:
+  commons_ntt_device_dbe:
+    path: ../commons_ntt_device_dbe
+  dependencies:
+    path: ../dependencies
+  ntt_device_models:
+    path: ../ntt_device_models
+  users_data_source:
+    path: ../users_data_source
